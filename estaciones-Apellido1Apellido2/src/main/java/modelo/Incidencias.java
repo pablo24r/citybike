@@ -42,7 +42,9 @@ public class Incidencias {
 	}
 
 
+	public void setPendiente(boolean pendiente) {
+		this.pendiente = pendiente;
+	}
 	
-	
-	
+
 }
