@@ -1,11 +1,15 @@
 package estaciones;
 
+import java.util.List;
+
 import modelo.SitioTuristico;
+import repositorios.EntidadNoEncontrada;
+import repositorios.RepositorioException;
 
 public interface ISItiosTuristicos {
 
-	SitioTuristico getSitiosDeInteres(String lat, String lon);
+	List<SitioTuristico> getSitiosDeInteres(String lat, String lon);
 	
-	String getInfoSitioDeInteres(String id);
+	String getInfoSitioDeInteres(String id) throws RepositorioException, EntidadNoEncontrada;
 	
 }
