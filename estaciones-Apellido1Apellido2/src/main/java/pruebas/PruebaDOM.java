@@ -1,7 +1,4 @@
-package estaciones;
-
-import java.util.LinkedList;
-import java.util.List;
+package pruebas;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -10,29 +7,21 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import modelo.SitioTuristico;
-import repositorios.EntidadNoEncontrada;
-import repositorios.FactoriaRepositorios;
-import repositorios.Repositorio;
-import repositorios.RepositorioException;
+public class PruebaDOM {
 
-public class SitiosTuristicosGeoNames implements ISItiosTuristicos{
-
-	private Repositorio<SitioTuristico, String> repositorio = FactoriaRepositorios.getRepositorio(SitioTuristico.class);
-
-	@Override
-	public List<SitioTuristico> getSitiosDeInteres(String lat, String lon) {
-		LinkedList<SitioTuristico> lista = new LinkedList<>();
-		
-		try {
+    public static void main(String[] args) {
+        try {
             // Obtener una factoría
             DocumentBuilderFactory factoria = DocumentBuilderFactory.newInstance();
 
             // Pedir a la factoría la construcción del analizador
             DocumentBuilder analizador = factoria.newDocumentBuilder();
+
+            String latt = "37";
+            String lngg = "0";
             
             // Analizar el documento desde la URL
-            Document documento = analizador.parse("http://api.geonames.org/findNearbyWikipedia?lat=" + lat + "&lng=" + lon +"&username=aadd&style=full&lang=es");
+            Document documento = analizador.parse("http://api.geonames.org/findNearbyWikipedia?lat=" + latt + "&lng=" + lngg +"&username=citybike&style=full&lang=es");
 
             // Obtener la lista de elementos 'entry'
             NodeList entries = documento.getElementsByTagName("entry");
@@ -42,31 +31,28 @@ public class SitiosTuristicosGeoNames implements ISItiosTuristicos{
                 Element entry = (Element) entries.item(i);
 
                 // Obtener las categorías y su contenido para cada 'entry'
+                String lang = entry.getElementsByTagName("lang").item(0).getTextContent();
                 String title = entry.getElementsByTagName("title").item(0).getTextContent();
                 String summary = entry.getElementsByTagName("summary").item(0).getTextContent();
+                String lat = entry.getElementsByTagName("lat").item(0).getTextContent();
+                String lng = entry.getElementsByTagName("lng").item(0).getTextContent();
                 String wikipediaUrl = entry.getElementsByTagName("wikipediaUrl").item(0).getTextContent();
                 String distancia = entry.getElementsByTagName("distance").item(0).getTextContent();
-                
-                if(!wikipediaUrl.isEmpty()) {
-                	SitioTuristico st = new SitioTuristico(title, summary, distancia, wikipediaUrl);
-                    lista.add(st);
-                    repositorio.add(st);
-                }
 
+
+                // Imprimir las categorías y su contenido
+                System.out.println("Lang: " + lang);
+                System.out.println("Title: " + title);
+                System.out.println("Summary: " + summary);
+                System.out.println("Distancia: " + distancia);
+                System.out.println("Latitude: " + lat);
+                System.out.println("Longitude: " + lng);
+                System.out.println("Wikipedia URL: " + wikipediaUrl);
+                System.out.println();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-		
-		return lista;
-	}
-
-	@Override
-	public String getInfoSitioDeInteres(String id) throws RepositorioException, EntidadNoEncontrada {
-		
-		SitioTuristico st = repositorio.getById(id);
-		return st.getDescripcion();
-		
-	}
-	
+    }
 }
+
