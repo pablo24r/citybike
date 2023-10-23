@@ -6,7 +6,7 @@ import modelo.SitioTuristico;
 import repositorios.EntidadNoEncontrada;
 import repositorios.RepositorioException;
 
-public interface ISItiosTuristicos {
+public interface ISitiosTuristicos {
 
 	List<SitioTuristico> getSitiosDeInteres(String lat, String lon);
 	

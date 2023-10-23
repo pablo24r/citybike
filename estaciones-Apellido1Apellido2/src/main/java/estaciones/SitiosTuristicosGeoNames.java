@@ -16,7 +16,7 @@ import repositorios.FactoriaRepositorios;
 import repositorios.Repositorio;
 import repositorios.RepositorioException;
 
-public class SitiosTuristicosGeoNames implements ISItiosTuristicos{
+public class SitiosTuristicosGeoNames implements ISitiosTuristicos{
 
 	private Repositorio<SitioTuristico, String> repositorio = FactoriaRepositorios.getRepositorio(SitioTuristico.class);
 
