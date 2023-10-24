@@ -1,7 +1,10 @@
 package modelo;
 
-public class SitioTuristico {
+import repositorios.Identificable;
 
+public class SitioTuristico implements Identificable {
+
+	private String id;
 	private String nombre;
 	private String descripcion;
 	private String distancia;
@@ -54,6 +57,17 @@ public class SitioTuristico {
 
 	public void setURL(String uRL) {
 		URL = uRL;
+	}
+
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 	

@@ -15,6 +15,7 @@ public class Estacion implements Identificable {
 				+ direccion + ", informacionTuristica=" + informacionTuristica + "]";
 	}
 
+	private String id;
 	private String nombre;
 	private LocalDate fechaAlata;
 	private int puestos; //indica cuantas bicis puede tener en cada momento
@@ -96,14 +97,12 @@ public class Estacion implements Identificable {
 	
 	@Override
 	public String getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 	@Override
 	public void setId(String id) {
-		// TODO Auto-generated method stub
-		
+		this.id = id;
 	}
 
 	public List<SitioTuristico> getListaSitios() {

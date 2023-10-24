@@ -1,14 +1,7 @@
 package estaciones;
 
-import java.util.LinkedList;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import modelo.Estacion;
 import modelo.SitioTuristico;
@@ -16,10 +9,12 @@ import repositorios.EntidadNoEncontrada;
 import repositorios.FactoriaRepositorios;
 import repositorios.Repositorio;
 import repositorios.RepositorioException;
+import servicio.FactoriaServicios;
 
 public class ServicioEstaciones implements IServicioEstaciones {
 
 	private Repositorio<Estacion, String> repositorio = FactoriaRepositorios.getRepositorio(Estacion.class);
+	private ISitiosTuristicos servicio = FactoriaServicios.getServicio(ISitiosTuristicos.class);
 
 	@Override
 	public String darAlta(String nombre, int puestos, String direccion, String lat, String lon, String info) throws RepositorioException {
@@ -44,54 +39,26 @@ public class ServicioEstaciones implements IServicioEstaciones {
 		
 		Estacion estacion = new Estacion(nombre,puestos, direccion, lat, lon, info);
 		
-		String id = repositorio.add(estacion);
+		String id = nombre.replace(" ", "_");
+		estacion.setId(id);
+		
+		repositorio.add(estacion);
 		
 		return id;
 	}
 
 	@Override
 	public List<SitioTuristico> getSitiosTuristicosCercanos(String id) throws RepositorioException, EntidadNoEncontrada {
-		LinkedList<SitioTuristico> lista = new LinkedList<>();
-		Estacion estacion = repositorio.getById(id);
-
-		try {
-			// Obtener una factoría
-			DocumentBuilderFactory factoria = DocumentBuilderFactory.newInstance();
-
-			// Pedir a la factoría la construcción del analizador
-			DocumentBuilder analizador = factoria.newDocumentBuilder();
-
-			// Analizar el documento desde la URL
-			Document documento = analizador.parse("http://api.geonames.org/findNearbyWikipedia?lat=" + estacion.getLat() + "&lng="
-					+ estacion.getLon() + "&username=aadd&style=full&lang=es");
-
-			// Obtener la lista de elementos 'entry'
-			NodeList entries = documento.getElementsByTagName("entry");
-
-			// Iterar sobre los elementos 'entry'
-			for (int i = 0; i < entries.getLength(); i++) {
-				Element entry = (Element) entries.item(i);
-
-				// Obtener las categorías y su contenido para cada 'entry'
-				String title = entry.getElementsByTagName("title").item(0).getTextContent();
-				String summary = entry.getElementsByTagName("summary").item(0).getTextContent();
-				String wikipediaUrl = entry.getElementsByTagName("wikipediaUrl").item(0).getTextContent();
-				String distancia = entry.getElementsByTagName("distance").item(0).getTextContent();
-
-				SitioTuristico st = new SitioTuristico(title, summary, distancia, wikipediaUrl);
-				lista.add(st);
-
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (repositorio.getById(id) == null) {
+			throw new IllegalArgumentException("No existe una estación con ese id");
 		}
-
-		return lista;
+		Estacion estacion = repositorio.getById(id);
+		return servicio.getSitiosDeInteres(estacion.getLat(), estacion.getLon());
 	}
 
 	@Override
 	public void setSitiosTuristicos(String id, List<SitioTuristico> sitiosTuristicos) throws RepositorioException, EntidadNoEncontrada {
-		getEstacion(id).getListaSitios().addAll(sitiosTuristicos);
+		repositorio.getById(id).getListaSitios().addAll(sitiosTuristicos);
 	}
 
 	@Override

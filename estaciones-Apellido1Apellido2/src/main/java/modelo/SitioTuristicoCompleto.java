@@ -9,10 +9,10 @@ public class SitioTuristicoCompleto {
 	private String resumen;
 	private List<String> categorias;
 	private List<String> enlaces;
-	private Image imagen;
+	private String imagen;
 	private String URL;
 	public SitioTuristicoCompleto(String nombre, String resumen, List<String> categorias, List<String> enlaces,
-			Image imagen, String uRL) {
+			String imagen, String uRL) {
 		super();
 		this.nombre = nombre;
 		this.resumen = resumen;
@@ -45,10 +45,10 @@ public class SitioTuristicoCompleto {
 	public void setEnlaces(List<String> enlaces) {
 		this.enlaces = enlaces;
 	}
-	public Image getImagen() {
+	public String getImagen() {
 		return imagen;
 	}
-	public void setImagen(Image imagen) {
+	public void setImagen(String imagen) {
 		this.imagen = imagen;
 	}
 	public String getURL() {
@@ -57,6 +57,13 @@ public class SitioTuristicoCompleto {
 	public void setURL(String uRL) {
 		URL = uRL;
 	}
+	
+	@Override
+	public String toString() {
+		return "Información completa del sitio turístico:\nNombre: " + nombre + "\nResumen: " + resumen
+				+ "\nCategorias: " + categorias + "\nEnlaces: " + enlaces + "\nImagen: " + imagen + "\nURL: " + URL;
+	}
+	
 	
 	
 
