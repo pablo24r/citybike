@@ -69,6 +69,14 @@ public class SitioTuristico implements Identificable {
 	public void setId(String id) {
 		this.id = id;
 	}
+
+
+	@Override
+	public String toString() {
+		return "Nombre: " + nombre + "\nDescripción: " + descripcion + "\nDistancia: " + distancia + "\nURL de Wikipedia: " + URL + "\n";
+	}
+	
+	
 	
 	
 }

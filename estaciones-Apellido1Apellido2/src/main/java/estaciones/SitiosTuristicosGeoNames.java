@@ -41,7 +41,7 @@ public class SitiosTuristicosGeoNames implements ISitiosTuristicos{
             DocumentBuilder analizador = factoria.newDocumentBuilder();
             
             // Analizar el documento desde la URL
-            Document documento = analizador.parse("http://api.geonames.org/findNearbyWikipedia?lat=" + lat + "&lng=" + lon +"&username=aadd&style=full&lang=es");
+            Document documento = analizador.parse("http://api.geonames.org/findNearbyWikipedia?lat=" + lat + "&lng=" + lon +"&username=citybike&style=full&lang=es");
 
             // Obtener la lista de elementos 'entry'
             NodeList entries = documento.getElementsByTagName("entry");
@@ -60,8 +60,9 @@ public class SitiosTuristicosGeoNames implements ISitiosTuristicos{
                 	SitioTuristico st = new SitioTuristico(nombre, descripcion, distancia, wikipediaUrl);
                 	String id = nombre.replace(" ", "_");
                 	st.setId(id);
+                	repositorio.add(st);
                     lista.add(st);
-                    repositorio.add(st);
+                    
                 }
 
             }
@@ -82,6 +83,7 @@ public class SitiosTuristicosGeoNames implements ISitiosTuristicos{
 		
 		String URLWikipedia = "";
 		SitioTuristico st = repositorio.getById(id);
+		System.out.println();
 		if (st != null) {
 			URLWikipedia = st.getURL();
 		}
@@ -134,13 +136,19 @@ public class SitiosTuristicosGeoNames implements ISitiosTuristicos{
 
             // Propiedad: Imagen en Wikimedia
             JsonArray imagenWikimediaArray = article.getJsonArray("http://es.dbpedia.org/property/imagen");
-            JsonObject imagenWikipediaObjeto = imagenWikimediaArray.getJsonObject(0);
-            String imagenWikipediaString = imagenWikipediaObjeto.getString("value");
-            System.out.println("Imagen en Wikimedia: " + imagenWikipediaString);       
+            String imagenWikipediaString;
+            if (imagenWikimediaArray == null) {
+            	imagenWikipediaString = "";
+            } else {
+            	JsonObject imagenWikipediaObjeto = imagenWikimediaArray.getJsonObject(0);
+                imagenWikipediaString = imagenWikipediaObjeto.getString("value");
+            }
+            
             
             conn.disconnect();
             
             SitioTuristicoCompleto stc = new SitioTuristicoCompleto(nombre, resumen, categorias, enlaces, imagenWikipediaString, URLWikipedia);
+            stc.setId(id);
             repositorio2.add(stc);
             return stc.toString();
 

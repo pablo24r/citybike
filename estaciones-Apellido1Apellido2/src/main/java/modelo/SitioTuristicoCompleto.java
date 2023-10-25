@@ -3,8 +3,11 @@ package modelo;
 import java.awt.Image;
 import java.util.List;
 
-public class SitioTuristicoCompleto { 
+import repositorios.Identificable;
+
+public class SitioTuristicoCompleto implements Identificable{ 
 	
+	private String id;
 	private String nombre;
 	private String resumen;
 	private List<String> categorias;
@@ -56,6 +59,16 @@ public class SitioTuristicoCompleto {
 	}
 	public void setURL(String uRL) {
 		URL = uRL;
+	}
+	
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 	@Override
