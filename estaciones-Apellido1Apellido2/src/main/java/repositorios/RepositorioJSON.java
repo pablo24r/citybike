@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
@@ -24,7 +23,8 @@ public abstract class RepositorioJSON<T extends Identificable> implements Reposi
         File directorio = new File(DIRECTORIO);
 
         if (!directorio.exists()) {
-            directorio.mkdir();
+            Boolean b = directorio.mkdir();
+            System.out.println("He creado el directorio?? " + b);
         }
     }
 
@@ -57,6 +57,7 @@ public abstract class RepositorioJSON<T extends Identificable> implements Reposi
             String jsonString = jsonb.toJson(entity);
             try (FileOutputStream fos = new FileOutputStream(documento)) {
                 fos.write(jsonString.getBytes());
+                System.out.println("Guardo el objeto en el json");
             }
         } catch (Exception e) {
             throw new RepositorioException("Error al guardar la entidad con id: " + entity.getId(), e);
@@ -65,7 +66,8 @@ public abstract class RepositorioJSON<T extends Identificable> implements Reposi
 
     protected T load(String id) throws RepositorioException, EntidadNoEncontrada {
         if (!checkDocumento(id)) {
-            throw new EntidadNoEncontrada("La entidad no existe, id: " + id);
+            //throw new EntidadNoEncontrada("La entidad no existe, id: " + id);
+        	return null;
         }
         final String documento = getDocumento(id);
 
@@ -88,10 +90,8 @@ public abstract class RepositorioJSON<T extends Identificable> implements Reposi
 
     @Override
     public String add(T entidad) throws RepositorioException {
-        String id = UUID.randomUUID().toString();
-        entidad.setId(id);
         save(entidad);
-        return id;
+        return entidad.getId();
     }
 
     @Override

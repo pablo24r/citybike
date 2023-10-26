@@ -24,24 +24,25 @@ import repositorios.FactoriaRepositorios;
 import repositorios.Repositorio;
 import repositorios.RepositorioException;
 
-public class SitiosTuristicosGeoNames implements ISitiosTuristicos{
+public class SitiosTuristicosGeoNames implements ISitiosTuristicos {
 
-	private Repositorio<SitioTuristico, String> repositorio = FactoriaRepositorios.getRepositorio(SitioTuristico.class);
-	private Repositorio<SitioTuristicoCompleto, String> repositorio2 = FactoriaRepositorios.getRepositorio(SitioTuristicoCompleto.class);
+    private Repositorio<SitioTuristico, String> repositorio = FactoriaRepositorios.getRepositorio(SitioTuristico.class);
+    private Repositorio<SitioTuristicoCompleto, String> repositorio2 = FactoriaRepositorios.getRepositorio(SitioTuristicoCompleto.class);
 
-	@Override
-	public List<SitioTuristico> getSitiosDeInteres(String lat, String lon) {
-		LinkedList<SitioTuristico> lista = new LinkedList<>();
-		
-		try {
+    @Override
+    public List<SitioTuristico> getSitiosDeInteres(String lat, String lon) {
+        LinkedList<SitioTuristico> lista = new LinkedList<>();
+
+        try {
             // Obtener una factoría
             DocumentBuilderFactory factoria = DocumentBuilderFactory.newInstance();
 
             // Pedir a la factoría la construcción del analizador
             DocumentBuilder analizador = factoria.newDocumentBuilder();
-            
+
             // Analizar el documento desde la URL
-            Document documento = analizador.parse("http://api.geonames.org/findNearbyWikipedia?lat=" + lat + "&lng=" + lon +"&username=citybike&style=full&lang=es");
+            Document documento = analizador
+                    .parse("http://api.geonames.org/findNearbyWikipedia?lat=" + lat + "&lng=" + lon + "&username=citybike&style=full&lang=es");
 
             // Obtener la lista de elementos 'entry'
             NodeList entries = documento.getElementsByTagName("entry");
@@ -55,42 +56,42 @@ public class SitiosTuristicosGeoNames implements ISitiosTuristicos{
                 String descripcion = entry.getElementsByTagName("summary").item(0).getTextContent();
                 String wikipediaUrl = entry.getElementsByTagName("wikipediaUrl").item(0).getTextContent();
                 String distancia = entry.getElementsByTagName("distance").item(0).getTextContent();
-                
-                if(!wikipediaUrl.isEmpty()) {
-                	SitioTuristico st = new SitioTuristico(nombre, descripcion, distancia, wikipediaUrl);
-                	String id = nombre.replace(" ", "_");
-                	st.setId(id);
-                	repositorio.add(st);
+
+                if (!wikipediaUrl.isEmpty()) {
+                    SitioTuristico st = new SitioTuristico(nombre, descripcion, distancia, wikipediaUrl);
+                    String id = nombre.replace(" ", "_");
+                    st.setId(id);
+                    repositorio.add(st);
                     lista.add(st);
-                    
+
                 }
 
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-		
-		return lista;
-	}
 
-	@Override
-	public String getInfoSitioDeInteres(String id) throws RepositorioException, EntidadNoEncontrada {
-		
-		SitioTuristicoCompleto sitioRep = repositorio2.getById(id);
-		if (sitioRep != null) {
-			return sitioRep.toString();
-		}
-		
-		String URLWikipedia = "";
-		SitioTuristico st = repositorio.getById(id);
-		System.out.println();
-		if (st != null) {
-			URLWikipedia = st.getURL();
-		}
-		
-		try {
+        return lista;
+    }
+
+    @Override
+    public String getInfoSitioDeInteres(String id) throws RepositorioException, EntidadNoEncontrada {
+
+        SitioTuristicoCompleto sitioRep = repositorio2.getById(id);
+        System.out.println("\nTengo ya " + id + " en el repositorioJSON?? " + (sitioRep!=null));
+        if (sitioRep != null) {
+            return sitioRep.toString();
+        }
+
+        String URLWikipedia = "";
+        SitioTuristico st = repositorio.getById(id);
+        if (st != null) {
+            URLWikipedia = st.getURL();
+        }
+
+        try {
             // URL del artículo en DBpedia
-			String dbpediaURL = "https://es.dbpedia.org/data/" + id + ".json";
+            String dbpediaURL = "https://es.dbpedia.org/data/" + id + ".json";
 
             // Realizar la solicitud HTTP
             HttpURLConnection conn = (HttpURLConnection) new URL(dbpediaURL).openConnection();
@@ -110,13 +111,11 @@ public class SitiosTuristicosGeoNames implements ISitiosTuristicos{
             JsonArray nombreArray = article.getJsonArray("http://www.w3.org/2000/01/rdf-schema#label");
             JsonObject nombreObj = nombreArray.getJsonObject(0);
             String nombre = nombreObj.getString("value");
-            
 
             // Propiedad: Resumen
             JsonArray resumenArray = article.getJsonArray("http://dbpedia.org/ontology/abstract");
             JsonObject resumenObj = resumenArray.getJsonObject(0);
             String resumen = resumenObj.getString("value");
-            
 
             // Propiedad: Categorías
             JsonArray categoriasArray = article.getJsonArray("http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
@@ -138,16 +137,16 @@ public class SitiosTuristicosGeoNames implements ISitiosTuristicos{
             JsonArray imagenWikimediaArray = article.getJsonArray("http://es.dbpedia.org/property/imagen");
             String imagenWikipediaString;
             if (imagenWikimediaArray == null) {
-            	imagenWikipediaString = "";
+                imagenWikipediaString = "";
             } else {
-            	JsonObject imagenWikipediaObjeto = imagenWikimediaArray.getJsonObject(0);
+                JsonObject imagenWikipediaObjeto = imagenWikimediaArray.getJsonObject(0);
                 imagenWikipediaString = imagenWikipediaObjeto.getString("value");
             }
-            
-            
+
             conn.disconnect();
-            
-            SitioTuristicoCompleto stc = new SitioTuristicoCompleto(nombre, resumen, categorias, enlaces, imagenWikipediaString, URLWikipedia);
+
+            SitioTuristicoCompleto stc = new SitioTuristicoCompleto(nombre, resumen, categorias, enlaces,
+                    imagenWikipediaString, URLWikipedia);
             stc.setId(id);
             repositorio2.add(stc);
             return stc.toString();
@@ -155,11 +154,7 @@ public class SitiosTuristicosGeoNames implements ISitiosTuristicos{
         } catch (Exception e) {
             e.printStackTrace();
         }
-		
-		return "ERROR: ALGO HA IDO MAL";
-		
+        return "ERROR: ALGO HA IDO MAL";
     }
-		
-	}
-	
+}
 
