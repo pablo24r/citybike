@@ -17,7 +17,7 @@ public class ServicioEstaciones implements IServicioEstaciones {
 	private ISitiosTuristicos servicio = FactoriaServicios.getServicio(ISitiosTuristicos.class);
 
 	@Override
-	public String darAlta(String nombre, int puestos, String direccion, String lat, String lon, String info) throws RepositorioException {
+	public String darAlta(String nombre, int puestos, String direccion, String lat, String lon) throws RepositorioException {
 		
 		if (nombre.isEmpty() || nombre == null)
 			throw new IllegalArgumentException("opciones: debes asignarle un nombre");
@@ -34,10 +34,7 @@ public class ServicioEstaciones implements IServicioEstaciones {
 		if (lon.isEmpty() || lon == null)
 			throw new IllegalArgumentException("opciones: debes asignarle una longitud");
 		
-		if (info.isEmpty() || info == null)
-			throw new IllegalArgumentException("opciones: debes asignarle una información turística");
-		
-		Estacion estacion = new Estacion(nombre,puestos, direccion, lat, lon, info);
+		Estacion estacion = new Estacion(nombre, puestos, direccion, lat, lon);
 		
 		String id = nombre.replace(" ", "_");
 		estacion.setId(id);

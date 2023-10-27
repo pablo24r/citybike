@@ -27,7 +27,7 @@ public class Estacion implements Identificable {
 		
 	}
 	
-	public Estacion(String nombre, int puestos, String direccion, String latitud, String longitud, String informacionTuristica) {
+	public Estacion(String nombre, int puestos, String direccion, String latitud, String longitud) {
 		super();
 		this.nombre = nombre;
 		this.fechaAlata = LocalDate.now();
@@ -35,7 +35,7 @@ public class Estacion implements Identificable {
 		this.direccion = direccion;
 		this.setLat(latitud);
 		this.setLon(longitud);
-		this.informacionTuristica = informacionTuristica;
+		this.informacionTuristica = ""; //En la explicacion de la clase dice que se debe incluir este campo, pese a que en la funcion darAlta no se mencione.
 		this.setListaSitios(new LinkedList<SitioTuristico>());
 	}
 

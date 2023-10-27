@@ -24,7 +24,6 @@ public abstract class RepositorioJSON<T extends Identificable> implements Reposi
 
         if (!directorio.exists()) {
             Boolean b = directorio.mkdir();
-            System.out.println("He creado el directorio?? " + b);
         }
     }
 
@@ -57,7 +56,6 @@ public abstract class RepositorioJSON<T extends Identificable> implements Reposi
             String jsonString = jsonb.toJson(entity);
             try (FileOutputStream fos = new FileOutputStream(documento)) {
                 fos.write(jsonString.getBytes());
-                System.out.println("Guardo el objeto en el json");
             }
         } catch (Exception e) {
             throw new RepositorioException("Error al guardar la entidad con id: " + entity.getId(), e);

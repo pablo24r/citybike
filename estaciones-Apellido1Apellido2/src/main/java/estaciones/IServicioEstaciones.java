@@ -9,7 +9,7 @@ import repositorios.RepositorioException;
 
 public interface IServicioEstaciones {
 
-	String darAlta(String nombre, int puestos, String direccion, String lat, String lon, String info) throws RepositorioException;
+	String darAlta(String nombre, int puestos, String direccion, String lat, String lon) throws RepositorioException;
 	
 	List<SitioTuristico> getSitiosTuristicosCercanos(String id) throws RepositorioException, EntidadNoEncontrada; 
 	

@@ -122,7 +122,9 @@ public class SitiosTuristicosGeoNames implements ISitiosTuristicos {
             LinkedList<String> categorias = new LinkedList<>();
             for (JsonObject categoriaObj : categoriasArray.getValuesAs(JsonObject.class)) {
                 String categoria = categoriaObj.getString("value");
-                categorias.add(categoria);
+                if (categoria.contains("dbpedia") || categoria.contains("wikidata")) {
+                	categorias.add(categoria);
+                }
             }
 
             // Propiedad: Enlaces externos
@@ -154,7 +156,7 @@ public class SitiosTuristicosGeoNames implements ISitiosTuristicos {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "ERROR: ALGO HA IDO MAL";
+        return "ERROR: ALGO HA IDO MAL"; // No debe ocurrir nunca
     }
 }
 
