@@ -38,6 +38,14 @@ public class Estacion implements Identificable {
 		this.informacionTuristica = ""; //En la explicacion de la clase dice que se debe incluir este campo, pese a que en la funcion darAlta no se mencione.
 		this.setListaSitios(new LinkedList<SitioTuristico>());
 	}
+	
+	public void aparcarEnEstacion() {
+		setPuestos(getPuestos()-1);
+	}
+	
+	public void retirarBiciDeEstacion() {
+		setPuestos(getPuestos()+1);
+	}
 
 	public String getNombre() {
 		return nombre;

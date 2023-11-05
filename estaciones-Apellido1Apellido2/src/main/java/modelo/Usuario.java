@@ -17,10 +17,35 @@ public class Usuario {
 		this.nombreApellidos = nombreApellidos;
 		this.admin = false;
 	}
-	
-	public void setAdmin(boolean valor) {
-		this.admin = valor;
+	public String getEmail() {
+		return email;
 	}
-	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public Date getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+	public void setFechaNacimiento(Date fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+	public int getTelefono() {
+		return telefono;
+	}
+	public void setTelefono(int telefono) {
+		this.telefono = telefono;
+	}
+	public String getNombreApellidos() {
+		return nombreApellidos;
+	}
+	public void setNombreApellidos(String nombreApellidos) {
+		this.nombreApellidos = nombreApellidos;
+	}
+	public boolean isAdmin() {
+		return admin;
+	}
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
 	
 }

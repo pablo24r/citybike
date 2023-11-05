@@ -18,7 +18,7 @@ public class Programa {
 		IServicioEstaciones servicioEstaciones = FactoriaServicios.getServicio(IServicioEstaciones.class);
 		ISitiosTuristicos servicioSitioTuristico = FactoriaServicios.getServicio(ISitiosTuristicos.class);
 
-		String id = servicioEstaciones.darAlta("Catedral de Murcia", 30, "30001", "37", "0");
+		String id = servicioEstaciones.darAltaEstacion("Catedral de Murcia", 30, "30001", "37", "0");
 
 		System.out.println("ID de la estación creada: " + id + "\n");
 		
