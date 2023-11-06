@@ -33,9 +33,9 @@ public class Programa {
 		
 		System.out.println("\nLista de sitios turisticos asociada a la Catedral de Murcia: \n" + servicioEstaciones.getEstacion(id).getListaSitios());
 		
-		System.out.println("\nInformación completa de '" + sitiosCercanos.get(4).getId() + "':\n" + servicioSitioTuristico.getInfoSitioDeInteres(sitiosCercanos.get(4).getId()));
+		System.out.println("\nInformación completa de '" + sitiosCercanos.get(4).getId() + "':\n" + servicioSitioTuristico.getInfoSitioDeInteres(sitiosCercanos.get(4).getId()).toString());
 		
-		System.out.println("\nInformación completa de '" + sitiosCercanos.get(4).getId() + "':\n" + servicioSitioTuristico.getInfoSitioDeInteres(sitiosCercanos.get(4).getId()));
+		System.out.println("\nInformación completa de '" + sitiosCercanos.get(4).getId() + "':\n" + servicioSitioTuristico.getInfoSitioDeInteres(sitiosCercanos.get(4).getId()).toString());
 
 	}
 

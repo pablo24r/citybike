@@ -1,0 +1,19 @@
+
+{
+    "URL-sitio": "https://en.wikipedia.org/wiki/Estación_de_Benahadux-Pechina",
+    "categorias-sitio": [
+        "http://dbpedia.org/ontology/Place",
+        "http://dbpedia.org/ontology/Location",
+        "http://dbpedia.org/ontology/Station",
+        "http://www.wikidata.org/entity/Q719456",
+        "http://dbpedia.org/ontology/Infrastructure",
+        "http://dbpedia.org/ontology/ArchitecturalStructure"
+    ],
+    "enlaces-sitio": [
+        "http://www.benahadux.es/rp024/ficha.php%3Fficha=300"
+    ],
+    "id": "Estación_de_Benahadux-Pechina",
+    "imagen-sitio": "",
+    "nombre-sitio": "Estación de Benahadux-Pechina",
+    "resumen-sitio": "Benahadux-Pechina es una estación de ferrocarril situada en el municipio español de Benahadux, aunque da servicio al municipio de Pechina, en la provincia de Almería. Actualmente no disponde de servicio de viajeros, aunque puede ser utilizada como apartadero para efectuar cruces entre trenes de viajeros y de mercancías. Está clasificada como instalación logística por ADIF.​"
+}

@@ -28,7 +28,9 @@ public class SitiosTuristicosGeoNames implements ISitiosTuristicos {
 
     private Repositorio<SitioTuristico, String> repositorio = FactoriaRepositorios.getRepositorio(SitioTuristico.class);
     private Repositorio<SitioTuristicoCompleto, String> repositorio2 = FactoriaRepositorios.getRepositorio(SitioTuristicoCompleto.class);
-
+    private final String URL_WIKIPEDIA = "https://en.wikipedia.org/wiki/";
+    
+    
     @Override
     public List<SitioTuristico> getSitiosDeInteres(String lat, String lon) {
         LinkedList<SitioTuristico> lista = new LinkedList<>();
@@ -75,19 +77,15 @@ public class SitiosTuristicosGeoNames implements ISitiosTuristicos {
     }
 
     @Override
-    public String getInfoSitioDeInteres(String id) throws RepositorioException, EntidadNoEncontrada {
+    public SitioTuristicoCompleto getInfoSitioDeInteres(String id) throws RepositorioException, EntidadNoEncontrada {
 
         SitioTuristicoCompleto sitioRep = repositorio2.getById(id);
         System.out.println("\nTengo ya " + id + " en el repositorioJSON?? " + (sitioRep!=null));
         if (sitioRep != null) {
-            return sitioRep.toString();
+            return sitioRep;
         }
 
-        String URLWikipedia = "";
-        SitioTuristico st = repositorio.getById(id);
-        if (st != null) {
-            URLWikipedia = st.getURL();
-        }
+        String URLWikipedia = URL_WIKIPEDIA + id;
 
         try {
             // URL del artículo en DBpedia
@@ -151,12 +149,12 @@ public class SitiosTuristicosGeoNames implements ISitiosTuristicos {
                     imagenWikipediaString, URLWikipedia);
             stc.setId(id);
             repositorio2.add(stc);
-            return stc.toString();
+            return stc;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "ERROR: ALGO HA IDO MAL"; // No debe ocurrir nunca
+        return null; // No debe ocurrir nunca
     }
 }
 
