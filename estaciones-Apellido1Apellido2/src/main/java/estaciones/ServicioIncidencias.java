@@ -23,6 +23,7 @@ public class ServicioIncidencias implements IServicioIncidencias {
 		Bici b = repositorioBicis.getById(idBici);
 		Incidencia i = new Incidencia(LocalDate.now(), descripcionIncidencia);
 		b.añadirIncidencia(i);
+		repositorioBicis.update(b); //ponemos la bici a NO_DISPONIBLE y añadimos la incidencia a su lista
 	}
 
 	@Override

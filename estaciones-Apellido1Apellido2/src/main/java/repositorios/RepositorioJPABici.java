@@ -9,4 +9,9 @@ public class RepositorioJPABici extends RepositorioJPA<Bici> {
 		return Bici.class;
 	}
 
+	@Override
+	public String getNombre() {
+		return Bici.class.getName().substring(Bici.class.getName().lastIndexOf(".") + 1);
+	}
+
 }

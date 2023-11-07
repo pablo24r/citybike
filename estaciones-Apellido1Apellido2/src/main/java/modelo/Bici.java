@@ -13,7 +13,6 @@ public class Bici implements Identificable {
 	private LocalDate fechaAlta;
 	private LocalDate fechaBaja;
 	private String motivo;
-	private List<Estacion> historicoEstaciones;
 	private Estacion estacionActual;
 	private EstadoBici estado;
 	private List<Incidencia> incidencias;
@@ -24,7 +23,6 @@ public class Bici implements Identificable {
 		this.codigo = codigo;
 		this.modelo = modelo;
 		this.fechaAlta = fechaAlta;
-		this.historicoEstaciones = new LinkedList<>();
 		this.incidencias = new LinkedList<>();
 		this.estacionActual = null;
 		this.estado = EstadoBici.DISPONIBLE;
@@ -43,11 +41,6 @@ public class Bici implements Identificable {
 		this.setEstado(EstadoBici.NO_DISPONIBLE);
 	}
 
-	public void añadirEstacionAHistorico(Estacion estacion) {
-		historicoEstaciones.add(estacion);
-	}
-
-
 	public Estacion getEstacionActual() {
 		return estacionActual;
 	}
@@ -55,7 +48,6 @@ public class Bici implements Identificable {
 
 	public void setEstacionActual(Estacion estacionActual) {
 		this.estacionActual = estacionActual;
-		this.añadirEstacionAHistorico(estacionActual);
 		estacionActual.aparcarEnEstacion();
 	}
 
@@ -97,17 +89,6 @@ public class Bici implements Identificable {
 	public void setMotivo(String motivo) {
 		this.motivo = motivo;
 	}
-
-
-	public List<Estacion> getHistoricoEstaciones() {
-		return historicoEstaciones;
-	}
-
-
-	public void setHistoricoEstaciones(List<Estacion> estaciones) {
-		this.historicoEstaciones = estaciones;
-	}
-
 
 	public EstadoBici getEstado() {
 		return estado;

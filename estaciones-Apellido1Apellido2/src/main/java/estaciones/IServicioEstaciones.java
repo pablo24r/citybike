@@ -18,7 +18,7 @@ public interface IServicioEstaciones {
 	
 	Estacion getEstacion(String id) throws RepositorioException, EntidadNoEncontrada;
 	
-	String darAltaBici(String modelo, Estacion estacion) throws RepositorioException;
+	String darAltaBici(String modelo, Estacion estacion) throws RepositorioException, EntidadNoEncontrada;
 	
 	void estacionarBici(String idBici, String idEstacion) throws RepositorioException, EntidadNoEncontrada;
 	

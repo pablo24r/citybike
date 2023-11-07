@@ -74,7 +74,7 @@ public class ServicioEstaciones implements IServicioEstaciones {
 	}
 
 	@Override
-	public String darAltaBici(String modelo, Estacion estacion) throws RepositorioException {
+	public String darAltaBici(String modelo, Estacion estacion) throws RepositorioException, EntidadNoEncontrada {
 		if (modelo.isEmpty() || modelo == null)
 			throw new IllegalArgumentException("modelo: debes asignarle un modelo");
 		
@@ -83,8 +83,8 @@ public class ServicioEstaciones implements IServicioEstaciones {
 		
 		String codigo = UUID.randomUUID().toString();
 		Bici b = new Bici(codigo, modelo, LocalDate.now());
-		b.setEstacionActual(estacion);
 		repositorioBicis.add(b);
+		estacionarBici(b.getId(), estacion.getId());
 		return codigo;
 	}
 
@@ -92,12 +92,21 @@ public class ServicioEstaciones implements IServicioEstaciones {
 	public void estacionarBici(String idBici, String idEstacion) throws RepositorioException, EntidadNoEncontrada {
 		Bici b = repositorioBicis.getById(idBici);
 		if (idEstacion != null) {
-			b.setEstacionActual(repositorioEstaciones.getById(idEstacion));
+			Estacion e = repositorioEstaciones.getById(idEstacion);
+			b.setEstacionActual(e);
+			Historico h = new Historico(b, e, LocalDate.now());
+			repositorioHistorico.add(h);
+			repositorioEstaciones.update(e); //porque al aparcar en ella hay que actualizar que tiene un puesto menos en la persistencia
+			repositorioBicis.update(b); //hay que actualizar que ahora mismo la bici esta en la estacion "e": this.estacionActual = e
 		} else {
 			LinkedList<Estacion> estaciones = (LinkedList<Estacion>) repositorioEstaciones.getAll();
 			for (Estacion e : estaciones) {
 				if (e.getPuestos() > 0) {
 					b.setEstacionActual(e);
+					Historico h = new Historico(b, e, LocalDate.now());
+					repositorioHistorico.add(h);
+					repositorioEstaciones.update(e); //porque al aparcar en ella hay que actualizar que tiene un puesto menos en la persistencia
+					repositorioBicis.update(b); //hay que actualizar que ahora mismo la bici esta en la estacion "e": this.estacionActual = e
 					break;
 				}
 			}
@@ -108,8 +117,18 @@ public class ServicioEstaciones implements IServicioEstaciones {
 	@Override
 	public void retirarBici(String id) throws RepositorioException, EntidadNoEncontrada {
 		Bici b = repositorioBicis.getById(id);
-		b.getEstacionActual().retirarBiciDeEstacion();
-		//falta gestionar el historico
+		Estacion e = repositorioEstaciones.getById(b.getEstacionActual().getId());
+		e.retirarBiciDeEstacion();
+		b.setEstacionActual(null);
+		List<Historico> historicos = repositorioHistorico.getAll();
+		for (Historico h : historicos) {
+			if (h.getBici().equals(b) && h.getFechaFin().equals(null)) { //hago este if porque puede hacer un historico de la misma bici de otro aparcamiento
+				h.setFechaFin(LocalDate.now());
+				repositorioHistorico.update(h);
+			}
+		}
+		repositorioEstaciones.update(e); //porque hemos desaparcado en ella, puestos++
+		repositorioBicis.update(b); //porque hay que actualizar estacionActual
 	}
 
 	@Override
@@ -117,7 +136,8 @@ public class ServicioEstaciones implements IServicioEstaciones {
 		Bici b = repositorioBicis.getById(id);
 		b.setMotivo(motivo);
 		b.setFechaBaja(LocalDate.now());
-		b.setEstado(EstadoBici.NO_DISPONIBLE);		
+		b.setEstado(EstadoBici.NO_DISPONIBLE);	
+		retirarBici(b.getId());
 	}
 
 	@Override
