@@ -2,13 +2,17 @@ package modelo;
 
 import java.time.LocalDate;
 
-public class Incidencia {
+import repositorios.Identificable;
 
+public class Incidencia implements Identificable{
+
+	private String id;
 	private LocalDate fechaCreacion;
 	private LocalDate fechaCierre;
 	private String descripcionIncidencia;
 	private String motivoCierre;
 	private EstadoIncidencia estado;
+	private String operario;
 
 	public Incidencia(LocalDate fechaCreacion, String descripcionIncidencia) {
 		super();
@@ -17,6 +21,7 @@ public class Incidencia {
 		this.fechaCierre = null;
 		this.motivoCierre = null;
 		this.estado = EstadoIncidencia.PENDIENTE;
+		this.operario = null;
 	}
 
 	public LocalDate getFechaCreacion() {
@@ -57,6 +62,24 @@ public class Incidencia {
 
 	public void setEstado(EstadoIncidencia estado) {
 		this.estado = estado;
+	}
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getOperario() {
+		return operario;
+	}
+
+	public void setOperario(String operario) {
+		this.operario = operario;
 	}
 
 }
