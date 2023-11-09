@@ -1,17 +1,40 @@
 package modelo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 
 import repositorios.Identificable;
 
-public class Incidencia implements Identificable{
-
+@Entity
+@Table(name = "incidencia")
+public class Incidencia implements Identificable, Serializable {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String id;
+	@Column(name = "fecha_creacion", columnDefinition = "DATE")
 	private LocalDate fechaCreacion;
+	@Column(name = "fecha_cierre", columnDefinition = "DATE")
 	private LocalDate fechaCierre;
+	@Lob
+	@Column(name = "descripcion_incidencia")
 	private String descripcionIncidencia;
+	@Lob
+	@Column(name = "motivo_cierre")
 	private String motivoCierre;
+	@Enumerated (EnumType.STRING)
+	@Column(name="estado")
 	private EstadoIncidencia estado;
+	@Column(name="operario")
 	private String operario;
 
 	public Incidencia(LocalDate fechaCreacion, String descripcionIncidencia) {
